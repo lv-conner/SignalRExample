@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="Scripts/jquery-1.6.4.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.3.js"></script>
+    <script src="/signalr/hubs"></script>
+</head>
+<body>
+    <div>
+        <input type="text" />
+        <button type="button"> submit</button>
+    </div>
+    <script>
+        //$(function () {
+        //    var chat = $.connection.ChatHub;
+        //    chat.client.Hello = function (name, message) {
+        //        console.log(name);
+        //        console.log(message);
+        //    }
+        //    $.connection.hub.start().done(function () {
+        //        chat.server.hello();
+        //    });
+        //});
+
+
+        //集线器类使用
+        $(function () {
+            var chat = $.connection.ChatHub;
+            chat.client.Message = function (name, message) {
+                console.log(name);
+                console.log(message);
+            }
+            chat.client.SendMessageWithId = function (name, message, id) {
+                console.log(name);
+                console.log(message);
+                console.log(id);
+            }
+            chat.on("onStart", function () {
+                console.log("connect");
+            });
+            chat.on("onReceived", function () {
+                console.log("connect");
+            });
+            $.connection.hub.start().done(function () {
+                chat.server.hello();
+            })
+            window.SendMessage = chat.server.message;
+            window.SendMessageWithId = chat.client.SendMessageWithId;
+        });
+        //持久化类使用
+        $(function () {
+            var connection = $.connection("/myConnection");
+            debugger;
+            connection.start().done(function () {
+                connection.send("Hello");
+                console.log("start");
+            });
+            connection.received(function (data) {
+                console.log(data);
+            });
+        })
+    </script>
+
+</body>
+</html>
